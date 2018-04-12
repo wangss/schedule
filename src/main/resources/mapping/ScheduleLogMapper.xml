@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.junyi.cms.schedule.model.ScheduleLogMapper">
+
+	<resultMap id="BaseResultMap" type="com.junyi.cms.schedule.model.ScheduleLog">
+		<id column="log_id" jdbcType="INTEGER" property="logId" />
+		<result column="execute_job_name" jdbcType="VARCHAR" property="executeJobName" />
+		<result column="execute_job_group" jdbcType="VARCHAR" property="executeJobGroup" />
+		<result column="execute_start_time" jdbcType="TIMESTAMP" property="executeStartTime" />
+		<result column="execute_result" jdbcType="VARCHAR" property="executeResult" />
+		<result column="execute_end_time" jdbcType="TIMESTAMP" property="executeEndTime" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+		<result column="last_updator" jdbcType="VARCHAR" property="lastUpdator" />
+	</resultMap>
+
+	<!-- 插入数据-单条 -->
+	<insert id="insertScheduleLog" useGeneratedKeys="true" keyProperty="logId" parameterType="com.junyi.cms.schedule.model.ScheduleLog">
+		insert into t_schedule_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="executeJobGroup != null"> execute_job_group, </if>
+			<if test="executeJobName != null"> execute_job_name, </if>
+			<if test="executeStartTime != null"> execute_start_time, </if>
+			<if test="executeResult != null"> execute_result, </if>
+			<if test="executeEndTime != null"> execute_end_time, </if>
+			<if test="isDelete != null"> is_delete, </if>
+			<if test="createTime != null"> create_time, </if>
+			<if test="creator != null"> creator, </if>
+			<if test="lastUpdateTime != null"> last_update_time, </if>
+			<if test="lastUpdator != null"> last_updator, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="executeJobGroup != null">  #{executeJobGroup, jdbcType=VARCHAR},</if>
+			<if test="executeJobName != null">  #{executeJobName, jdbcType=VARCHAR},</if>
+			<if test="executeStartTime != null">  #{executeStartTime, jdbcType=TIMESTAMP},</if>
+			<if test="executeResult != null">  #{executeResult, jdbcType=VARCHAR},</if>
+			<if test="executeEndTime != null">  #{executeEndTime, jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">  #{isDelete, jdbcType=TINYINT},</if>
+			<if test="createTime != null">  #{createTime, jdbcType=TIMESTAMP},</if>
+			<if test="creator != null">  #{creator, jdbcType=INTEGER},</if>
+			<if test="lastUpdateTime != null">  #{lastUpdateTime, jdbcType=TIMESTAMP},</if>
+			<if test="lastUpdator != null">  #{lastUpdator, jdbcType=INTEGER},</if>
+        </trim>
+	</insert>
+
+	<select id="getScheduleLog" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			log_id
+			,execute_job_group
+			,execute_job_name
+			,execute_start_time
+			,execute_result
+			,execute_end_time
+			,is_delete
+			,create_time
+			,creator
+			,last_update_time
+			,last_updator
+		 FROM t_schedule_log
+		 <where>
+		 	<if test="logId != null"> 
+		 		AND log_id = #{ logId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="executeJobGroup != null"> 
+		 		AND execute_job_group = #{ executeJobGroup, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="executeJobName != null">
+		 		AND execute_job_name = #{ executeJobName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="startTime != null">
+		 		AND execute_start_time <![CDATA[>=]]> #{ startTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="endTime != null">
+		 		AND #{ endTime, jdbcType=TIMESTAMP} <![CDATA[>=]]> execute_start_time
+		 	</if>
+		 </where>
+		 order by log_id desc
+		 limit #{startNum},#{limitNum}
+	</select>
+	
+	<select id="getScheduleLogCnt" parameterType="java.util.Map" resultType="Integer">
+		SELECT
+			count(*)
+		 FROM t_schedule_log
+		 <where>
+		 	<if test="logId != null"> 
+		 		AND log_id = #{ logId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="executeJobGroup != null"> 
+		 		AND execute_job_group = #{ executeJobGroup, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="executeJobName != null">
+		 		AND execute_job_name = #{ executeJobName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="startTime != null">
+		 		AND execute_start_time <![CDATA[>=]]> #{ startTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="endTime != null">
+		 		AND #{ endTime, jdbcType=TIMESTAMP} <![CDATA[>=]]> execute_start_time
+		 	</if>
+		 </where>
+	</select>
+</mapper>

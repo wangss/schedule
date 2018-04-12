@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 注意：这要填好自己的项目名 -->
+    <property name="projectName" value="schedule_console"/>
+    <!-- 注意：日志路径规范统一为 /var/logger/junyi -->
+    <property name="logDir" value="/var/log/junyi"/>
+    <!-- 控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每天滚动，且 <maxHistory>是10，则只保存最近10天的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除。-->
+    <property name="maxHistory" value="15"/>
+    <!-- 控制保留的归档文件的最大数量，超出数量就删除旧文件（针对error日志）。 -->
+    <property name="errorMaxHistory" value="30"/>
+
+    <!-- 控制台日志：输出全部日志到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 文件日志：输出全部日志到文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <file>${logDir}/${projectName}/${projectName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${projectName}/${projectName}-%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志：用于将错误日志输出到独立文件 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${logDir}/${projectName}/${projectName}-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${projectName}/${projectName}-error-%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <maxHistory>${errorMaxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 追踪日志：用于将追踪日志输出到独立文件 -->
+    <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/${projectName}/${projectName}-trace.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${projectName}/${projectName}-trace-%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.apache.zookeeper" level="DEBUG"/>
+    <logger name="org.springframework.data.redis" level="WARN"/>
+    <logger name="o.a.kafka.common.network.Selector" level="ERROR"/>
+    <!--<logger name="com.dianping.cat.log4j.CatAppender"/>-->
+
+    <logger name="WebRequestTraceFilter" level="DEBUG" additivity="false">
+        <appender-ref ref="TRACE"/>
+    </logger>
+
+    <!-- 日志输出级别 -->
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+
+</configuration>

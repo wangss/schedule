@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.junyi.cms.schedule.model.ScheduleJobMapper">
+
+	<resultMap id="BaseResultMap" type="com.junyi.cms.schedule.model.ScheduleJob">
+		<id column="job_id" jdbcType="INTEGER" property="jobId" />
+		<result column="job_name" jdbcType="VARCHAR" property="jobName" />
+		<result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
+		<result column="job_status" jdbcType="TINYINT" property="jobStatus" />
+		<result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="bean_id" jdbcType="VARCHAR" property="beanId" />
+		<result column="bean_name" jdbcType="VARCHAR" property="beanName" />
+		<result column="method_name" jdbcType="VARCHAR" property="methodName" />
+		<result column="is_concurrent" jdbcType="TINYINT" property="isConcurrent" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+		<result column="updator_id" jdbcType="INTEGER" property="updatorId" />
+	</resultMap>
+
+
+	<!-- 可能用于查询的条件参数, 给通用方法使用 -->
+	<sql id="WhereParams">
+		<if test="pJobId != null"> AND job_id = #{ pJobId, jdbcType=INTEGER}</if>
+		<if test="pJobName != null"> AND job_name = #{ pJobName, jdbcType=VARCHAR}</if>
+		<if test="pJobGroup != null"> AND job_group = #{ pJobGroup, jdbcType=VARCHAR}</if>
+		<if test="pJobStatus != null"> AND job_status = #{ pJobStatus, jdbcType=TINYINT}</if>
+		<if test="pBeanId != null"> AND bean_id = #{ pBeanId, jdbcType=VARCHAR}</if>
+		<if test="pBeanName != null"> AND bean_name = #{ pBeanName, jdbcType=VARCHAR}</if>
+		<if test="pMethodName != null"> AND method_name = #{ pMethodName, jdbcType=VARCHAR}</if>
+		<if test="pIsConcurrent != null"> AND is_concurrent = #{ pIsConcurrent, jdbcType=TINYINT}</if>
+	</sql>
+
+	<!-- 可能更改的字段, 给通用方法使用 -->
+	<sql id="UpdateSetColumns">
+		<set>
+			<if test="jobId != null"> job_id = #{jobId, jdbcType=INTEGER},</if>
+			<if test="jobName != null"> job_name = #{jobName, jdbcType=VARCHAR},</if>
+			<if test="jobGroup != null"> job_group = #{jobGroup, jdbcType=VARCHAR},</if>
+			<if test="jobStatus != null"> job_status = #{jobStatus, jdbcType=TINYINT},</if>
+			<if test="cronExpression != null"> cron_expression = #{cronExpression, jdbcType=VARCHAR},</if>
+			<if test="description != null"> description = #{description, jdbcType=VARCHAR},</if>
+			<if test="beanId != null"> bean_id = #{beanId, jdbcType=VARCHAR},</if>
+			<if test="beanName != null"> bean_name = #{beanName, jdbcType=VARCHAR},</if>
+			<if test="methodName != null"> method_name = #{methodName, jdbcType=VARCHAR},</if>
+			<if test="isConcurrent != null"> is_concurrent = #{isConcurrent, jdbcType=TINYINT},</if>
+			<if test="createTime != null"> create_time = #{createTime, jdbcType=TIMESTAMP},</if>
+			<if test="creatorId != null"> creator_id = #{creatorId, jdbcType=INTEGER},</if>
+			<if test="lastUpdateTime != null"> last_update_time = #{lastUpdateTime, jdbcType=TIMESTAMP},</if>
+			<if test="updatorId != null"> updator_id = #{updatorId, jdbcType=INTEGER},</if>
+		</set>
+	</sql>
+
+
+
+
+
+	<!-- 插入数据-单条 -->
+	<insert id="insertScheduleJob" useGeneratedKeys="true" keyProperty="jobId" parameterType="com.junyi.cms.schedule.model.ScheduleJob">
+		insert into t_schedule_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jobName != null"> job_name, </if>
+			<if test="jobGroup != null"> job_group, </if>
+			<if test="jobStatus != null"> job_status, </if>
+			<if test="cronExpression != null"> cron_expression, </if>
+			<if test="description != null"> description, </if>
+			<if test="beanId != null"> bean_id, </if>
+			<if test="beanName != null"> bean_name, </if>
+			<if test="methodName != null"> method_name, </if>
+			<if test="isConcurrent != null"> is_concurrent, </if>
+			<if test="createTime != null"> create_time, </if>
+			<if test="creatorId != null"> creator_id, </if>
+			<if test="lastUpdateTime != null"> last_update_time, </if>
+			<if test="updatorId != null"> updator_id, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="jobName != null">  #{jobName, jdbcType=VARCHAR},</if>
+			<if test="jobGroup != null">  #{jobGroup, jdbcType=VARCHAR},</if>
+			<if test="jobStatus != null">  #{jobStatus, jdbcType=TINYINT},</if>
+			<if test="cronExpression != null">  #{cronExpression, jdbcType=VARCHAR},</if>
+			<if test="description != null">  #{description, jdbcType=VARCHAR},</if>
+			<if test="beanId != null">  #{beanId, jdbcType=VARCHAR},</if>
+			<if test="beanName != null">  #{beanName, jdbcType=VARCHAR},</if>
+			<if test="methodName != null">  #{methodName, jdbcType=VARCHAR},</if>
+			<if test="isConcurrent != null">  #{isConcurrent, jdbcType=TINYINT},</if>
+			<if test="createTime != null">  #{createTime, jdbcType=TIMESTAMP},</if>
+			<if test="creatorId != null">  #{creatorId, jdbcType=INTEGER},</if>
+			<if test="lastUpdateTime != null">  #{lastUpdateTime, jdbcType=TIMESTAMP},</if>
+			<if test="updatorId != null">  #{updatorId, jdbcType=INTEGER},</if>
+        </trim>
+	</insert>
+
+	<!-- 通用查询方法 -->
+	<select id="getScheduleJob" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			job_id
+			,job_name
+			,job_group
+			,job_status
+			,cron_expression
+			,description
+			,bean_id
+			,bean_name
+			,method_name
+			,is_concurrent
+			,create_time
+			,creator_id
+			,last_update_time
+			,updator_id
+		 FROM t_schedule_job
+		 WHERE 1=1
+         <include refid="WhereParams"/>
+	</select>
+	
+
+	<!-- 通用查询方法 -->
+	<select id="getScheduleJobCnt" parameterType="java.util.Map" resultType="Integer">
+		SELECT
+			count(*)
+		 FROM t_schedule_job
+		 <where>
+		 	<if test="jobName != null">
+		 		and job_name = #{jobName}
+		 	</if>
+		 	<if test="jobGroup != null">
+		 		and job_group = #{jobGroup}
+		 	</if>
+		 </where>
+	</select>
+	
+	
+	<!-- 通用查询方法 -->
+	<select id="getScheduleJobByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			job_id
+			,job_name
+			,job_group
+			,job_status
+			,cron_expression
+			,description
+			,bean_id
+			,bean_name
+			,method_name
+			,is_concurrent
+			,create_time
+			,creator_id
+			,last_update_time
+			,updator_id
+		 FROM t_schedule_job
+		 <where>
+		 	<if test="jobName != null">
+		 		and job_name = #{jobName}
+		 	</if>
+		 	<if test="jobGroup != null">
+		 		and job_group = #{jobGroup}
+		 	</if>
+		 </where>
+		 order by job_id desc
+		 limit #{startNum},#{limitNum}
+	</select>
+
+    <!-- 通用查询方法 -->
+    <select id="getScheduleJobByJobId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        job_id
+        ,job_name
+        ,job_group
+        ,job_status
+        ,cron_expression
+        ,description
+        ,bean_id
+        ,bean_name
+        ,method_name
+        ,is_concurrent
+        ,create_time
+        ,creator_id
+        ,last_update_time
+        ,updator_id
+        FROM t_schedule_job
+
+        WHERE job_id = #{pJobId, jdbcType=INTEGER}
+    </select>
+
+
+	<!-- 更新，通用方法 -->
+	<update id="updateScheduleJobByJobId" parameterType="map">
+		update t_schedule_job
+		<include refid="UpdateSetColumns"/>
+		where job_id = #{jobId, jdbcType=INTEGER}
+	</update>
+
+</mapper>

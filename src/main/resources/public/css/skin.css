@@ -1,0 +1,9 @@
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: #222D32;
+    testcolor: #e8e8e8;
+}
+
+
+.skin-blue .user-panel > .info, .skin-blue .user-panel > .info > a {
+    color: #FFF;
+}

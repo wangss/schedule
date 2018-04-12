@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.junyi.cms.login.model.UserMapper">
+	<resultMap id="BaseResultMap" type="com.junyi.cms.login.model.User">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="pswd" jdbcType="VARCHAR" property="pswd" />
+		<result column="department" jdbcType="VARCHAR" property="department" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+		<result column="status" jdbcType="BIGINT" property="status" />
+	</resultMap>
+
+
+
+	<!-- 通用查询方法 -->
+	<select id="getUser" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			id
+			,nickname
+			,username
+			,pswd
+			,department
+			,telephone
+			,email
+			,create_time
+			,last_login_time
+			,status
+		 FROM u_user
+		 WHERE 1=1
+			<if test="nickname != null"> AND nickname = #{nickname, jdbcType=VARCHAR}</if>
+			<if test="username != null"> AND username = #{username, jdbcType=VARCHAR}</if>
+			<if test="pswd != null"> AND pswd = #{pswd, jdbcType=VARCHAR}</if>
+			<if test="department != null"> AND department = #{department, jdbcType=VARCHAR}</if>
+			<if test="telephone != null"> AND telephone = #{telephone, jdbcType=VARCHAR}</if>
+			<if test="email != null"> AND email = #{email, jdbcType=VARCHAR}</if>
+			<if test="createTime != null"> AND create_time = #{createTime, jdbcType=TIMESTAMP}</if>
+			<if test="lastLoginTime != null"> AND last_login_time = #{lastLoginTime, jdbcType=TIMESTAMP}</if>
+			<if test="status != null"> AND status = #{status, jdbcType=BIGINT}</if>
+	</select>
+
+	<!-- 通用查询方法 -->
+	<select id="getUserByUsername"  resultMap="BaseResultMap">
+		SELECT
+		id
+		,nickname
+		,username
+		,pswd
+		,department
+		,telephone
+		,email
+		,create_time
+		,last_login_time
+		,status
+		FROM u_user
+		WHERE username = #{username, jdbcType=VARCHAR}
+
+	</select>
+
+</mapper>

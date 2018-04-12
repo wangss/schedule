@@ -1,0 +1,43 @@
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://host/db?useUnicode=true&characterEncoding=utf-8
+    username: username
+    password: password
+    driverClassName: com.mysql.jdbc.Driver
+    initialSize: 10
+    minIdle: 10
+    maxActive: 20
+    maxWait: 50000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+
+## ----dubbo配置----
+  dubbo:
+    application:
+      name: scheduler-consumer
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    scan: com.test
+
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.test
+
+server:
+  port: 8081
+
+
+logging:
+  config: classpath:logback.xml
